@@ -7,6 +7,9 @@
 #include "allegro5/allegro_font.h"
 #include "allegro5/allegro_ttf.h"
 
+#include "allegro5/allegro_audio.h"
+#include "allegro5/allegro_acodec.h"
+
 #include "world.h"
 
 using namespace std;
@@ -45,10 +48,28 @@ int main(int argc, char **argv){
    }
     al_init_font_addon();
     al_init_ttf_addon();
+
+   if(!al_install_audio()){
+      cerr << "failed to initialize audio!"<< endl;
+      return -1;
+   }
+
+   if(!al_init_acodec_addon()){
+      cerr << "failed to initialize audio codecs!"<< endl;
+      return -1;
+   }
+
+   if (!al_reserve_samples(100)){
+      cerr << "failed to reserve samples!"<< endl;
+      return -1;
+   }
+
+
+
    // This option causes the display to wait for VSYNC before flipping
    // pages. This can help to avoid tearing. Comment this out if you
    // are having refresh problems.
-   al_set_new_display_option(ALLEGRO_VSYNC, 1, ALLEGRO_REQUIRE);
+   //al_set_new_display_option(ALLEGRO_VSYNC, 1, ALLEGRO_REQUIRE); //VSYNC causes issues on my PC
 
    ALLEGRO_DISPLAY *display = al_create_display(WIDTH, HEIGHT);
 
@@ -84,6 +105,8 @@ int main(int argc, char **argv){
    al_start_timer(timer);
 
    csis3700::world world;
+
+
 
    double time = 0;
    bool redraw = true; // paint the first time through

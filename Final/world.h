@@ -7,6 +7,9 @@
 #include "player_sprite.h"
 #include <vector>
 
+#include "allegro5/allegro_audio.h"
+#include "allegro5/allegro_acodec.h"
+
 namespace csis3700 {
   class world {
   public:
@@ -64,7 +67,16 @@ namespace csis3700 {
     float camera_y = 0;
     int score = 0;
     int lives = 3;
+    int time = 1000;
     ALLEGRO_FONT* font;
+    ALLEGRO_SAMPLE_ID id;
+    ALLEGRO_SAMPLE *theme;
+    ALLEGRO_SAMPLE_INSTANCE *themeInstance;
+    ALLEGRO_SAMPLE *themefast=NULL;
+    ALLEGRO_SAMPLE_INSTANCE *themeFastInstance=NULL;
+    ALLEGRO_SAMPLE *dead=NULL;
+    ALLEGRO_SAMPLE_INSTANCE *deadInstance=NULL;
+
   };
 }
 
