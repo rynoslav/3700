@@ -18,6 +18,7 @@ namespace csis3700 {
     image_sequence *jump_left;
     image_sequence *jump_right;
     image_sequence *jump;
+
   };
 }
 
