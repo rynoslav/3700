@@ -5,6 +5,8 @@
 #include "allegro5/allegro_font.h"
 #include "sprite.h"
 #include "player_sprite.h"
+#include "enemy_sprite.h"
+#include "obstruction_sprite.h"
 #include <vector>
 
 #include "allegro5/allegro_audio.h"
@@ -62,12 +64,17 @@ namespace csis3700 {
   private:
     void resolve_collisions();
     player_sprite *player;
+    enemy_sprite *goomba;
+    obstruction_sprite *tunnel;
+    obstruction_sprite *coin;
+    obstruction_sprite *castle;
+    obstruction_sprite *brick;
     std::vector<sprite*> sprites;
     float camera_x = 0;
     float camera_y = 0;
     int score = 0;
     int lives = 3;
-    int time = 1000;
+    int time = 10000;
     ALLEGRO_FONT* font;
     ALLEGRO_SAMPLE_ID id;
     ALLEGRO_SAMPLE *theme;

@@ -12,12 +12,15 @@ namespace csis3700 {
    */
   class obstruction_sprite : public sprite {
   public:
-         obstruction_sprite(float initial_x, float initial_y, ALLEGRO_BITMAP *image=NULL, ALLEGRO_BITMAP *im2=NULL);
+         obstruction_sprite(float initial_x, float initial_y, ALLEGRO_BITMAP *image=NULL);
         virtual void set_velocity(const vec2d& v);
         virtual vec2d get_velocity() const;
         virtual void resolve(const collision& collision, sprite* other);
     private:
         image_sequence *tunnel;
+        image_sequence *coin;
+        image_sequence *castle;
+        image_sequence *brick;
   };
 
 /*

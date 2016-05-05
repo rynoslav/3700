@@ -45,8 +45,7 @@ namespace csis3700 {
 
   void player_sprite::advance_by_time(double dt) {
     phys_sprite::advance_by_time(dt);
-
-    if(keyboard_manager::get() -> is_key_down(ALLEGRO_KEY_RIGHT) && keyboard_manager::get() -> is_key_down(ALLEGRO_KEY_UP) && position.get_y() >= 505){
+    if(keyboard_manager::get() -> is_key_down(ALLEGRO_KEY_RIGHT) && keyboard_manager::get() -> is_key_down(ALLEGRO_KEY_UP) && on_ground == true){
         set_velocity(vec2d(150, -325));
         set_acceleration(vec2d(0, 500));
         jump_right = new image_sequence;
@@ -62,8 +61,8 @@ namespace csis3700 {
         else{
             al_play_sample(sample, 1.0, 0.0,1.0,ALLEGRO_PLAYMODE_ONCE,NULL);
         }
-
-    } else if(keyboard_manager::get() -> is_key_down(ALLEGRO_KEY_LEFT) && keyboard_manager::get() -> is_key_down(ALLEGRO_KEY_UP) && position.get_y() >= 505){
+        set_on_ground(false);
+    } else if(keyboard_manager::get() -> is_key_down(ALLEGRO_KEY_LEFT) && keyboard_manager::get() -> is_key_down(ALLEGRO_KEY_UP) && on_ground == true){
         set_velocity(vec2d(-150, -325));
         set_acceleration(vec2d(0, 500));
         jump_left = new image_sequence;
@@ -80,8 +79,8 @@ namespace csis3700 {
         else{
             al_play_sample(sample, 1.0, 0.0,1.0,ALLEGRO_PLAYMODE_ONCE,NULL);
         }
-
-    } else if(keyboard_manager::get() -> is_key_down(ALLEGRO_KEY_UP) && position.get_y() >= 505){
+        set_on_ground(false);
+    } else if(keyboard_manager::get() -> is_key_down(ALLEGRO_KEY_UP) && on_ground == true){
         set_velocity(vec2d(0, -325));
         set_acceleration(vec2d(0, 500));
         jump = new image_sequence;
@@ -97,15 +96,16 @@ namespace csis3700 {
         else{
             al_play_sample(sample, 1.0, 0.0,1.0,ALLEGRO_PLAYMODE_ONCE,NULL);
         }
-    } else if (keyboard_manager::get() -> is_key_down(ALLEGRO_KEY_RIGHT) && position.get_y() >= 505){
+        set_on_ground(false);
+    } else if (keyboard_manager::get() -> is_key_down(ALLEGRO_KEY_RIGHT) && on_ground == true){
         set_image_sequence(walk_right);
         set_velocity(vec2d(150, 0));
 
-    } else if (keyboard_manager::get() -> is_key_down(ALLEGRO_KEY_LEFT) && position.get_y() >= 505){
+    } else if (keyboard_manager::get() -> is_key_down(ALLEGRO_KEY_LEFT) && on_ground == true){
         set_image_sequence(walk_left);
         set_velocity(vec2d(-150, 0));
 
-    } else if(position.get_y() >= 505){
+    } else if(position.get_y() >= 505 || on_ground == true){
         set_on_ground(true);
         set_velocity(vec2d(0,0));
         set_acceleration(vec2d(0,0));
@@ -114,8 +114,21 @@ namespace csis3700 {
   }
 
   void player_sprite::resolve(const collision& collision, sprite *other) {
-  //if (other->bounding_box().  get_position()){cout<<"collision!" << endl;}
-
+  if ((other->bounding_box().upper_left_corner().get_x() <= (get_position().get_x() + get_width())) && (other->bounding_box().upper_left_corner().get_y() +10 <= (get_position().get_y() + get_height())) && ((other->bounding_box().upper_left_corner().get_x() + other -> get_width()) >= (get_position().get_x() + get_width()))){
+        cout<<"collision! left" << endl;
+        set_velocity(vec2d(-75,0));
   }
-
+  else if (((other->bounding_box().upper_left_corner().get_x()+other -> get_width()) >= get_position().get_x()) && (other->bounding_box().upper_left_corner().get_y()+10 <= (get_position().get_y() + get_height())) && (other->bounding_box().upper_left_corner().get_x() <= get_position().get_x() + get_width())){
+        cout<<"collision! right" << endl;
+        set_velocity(vec2d(75,0));
+  }
+  else if (other->bounding_box().upper_left_corner().get_y() <= (get_position().get_y() + get_height()) && other->bounding_box().upper_left_corner().get_x() <= (get_position().get_x() + get_width()) && (other->bounding_box().upper_left_corner().get_x() + other-> get_width()) >= get_position().get_x()){
+        cout<<"collision! up" << endl;
+        set_on_ground(true);
+  }
+  else if(other->bounding_box().upper_left_corner().get_x() > (get_position().get_x() + get_width()) && (other->bounding_box().upper_left_corner().get_x() + other->get_width()) < get_position().get_x() || position.get_y() < 505){
+        set_on_ground(false);
+        set_acceleration(vec2d(0, 500));
+  }
+}
 }

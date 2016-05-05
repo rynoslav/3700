@@ -10,7 +10,7 @@
 #include "player_sprite.h"
 #include "obstruction_sprite.h"
 #include "collision.h"
-
+#include "enemy_sprite.h"
 #include "allegro5/allegro_audio.h"
 #include "allegro5/allegro_acodec.h"
 
@@ -31,6 +31,18 @@ namespace csis3700 {
       assert(font != NULL);
       player = new player_sprite(0, 505);
       sprites.push_back(player);
+      goomba = new enemy_sprite(0, 525);
+      sprites.push_back(goomba);
+      //tunnel = new obstruction_sprite(100, 465, image_library::get() -> get("tube.png"));
+      //sprites.push_back(tunnel);
+      tunnel = new obstruction_sprite(50, 465, image_library::get() -> get("tube.png"));
+      sprites.push_back(tunnel);
+      castle = new obstruction_sprite(1000, 462, image_library::get() -> get("castle.png"));
+      sprites.push_back(castle);
+      brick = new obstruction_sprite(1000, 525, image_library::get() -> get("brick.png"));
+      sprites.push_back(brick);
+      coin = new obstruction_sprite(1000, 505,image_library::get() -> get("coin.png"));
+      sprites.push_back(coin);
       if (camera_x < 0)
         camera_x = 0;
       if (camera_y < 0)
@@ -96,8 +108,12 @@ namespace csis3700 {
   }
 
   void world::resolve_collisions() {
-
-
+    //if(player -> get_position().get_x() == tunnel -> get_position().get_x()){
+    for (int i = 2; i < 5; i++){
+        collision player_obstacle(sprites[0], sprites[i]);
+        player -> resolve(player_obstacle, sprites[i]);
+    }
+    //}
   }
 
   void world::advance_by_time(double dt) {
@@ -109,14 +125,6 @@ namespace csis3700 {
 
   void world::draw() {
     ALLEGRO_BITMAP *bg_image = NULL;
-
-    ALLEGRO_BITMAP *tunnel = image_library::get() -> get("tube.png");
-
-    ALLEGRO_BITMAP *coin = image_library::get() -> get("coin.png");
-
-    ALLEGRO_BITMAP *castle = image_library::get() -> get("castle.png");
-
-    ALLEGRO_BITMAP *brick = image_library::get() -> get("brick.png");
 
     ALLEGRO_TRANSFORM T;
     al_identity_transform(&T);
@@ -131,25 +139,25 @@ namespace csis3700 {
     for(vector<sprite*>::iterator it = sprites.begin(); it != sprites.end(); ++it)
       (*it)->draw();
 
-    obstruction_sprite tunnel1(300,505, tunnel);
+    /*obstruction_sprite tunnel1(300,505, tunnel);
     obstruction_sprite coin1(50,505, coin);
     obstruction_sprite castle1(100,462, castle);
     obstruction_sprite brick1(200,400, brick);
-    obstruction_sprite brick2(249,400, brick);
+    obstruction_sprite brick2(249,400, brick);*/
 
 
     al_identity_transform(&T);
     al_use_transform(&T);
     al_draw_textf(font, al_map_rgb(255, 255, 255), 100, 0, 0, "SCORE: %d", score);
     al_draw_textf(font, al_map_rgb(255, 255, 255), 1000, 0, 0, "LIVES x %d", lives);
-    al_draw_textf(font, al_map_rgb(255, 255, 255), 500, 0, 0, "TIME: %d", time);
-    time -= .000000000001;
+    al_draw_textf(font, al_map_rgb(255, 255, 255), 500, 0, 0, "TIME: %d", time/10);
+    time -= .0000000000001;
 
-            if (time<=500 && time > 1){ //start faster music due to low on time
+            if (time<=3000 && time > 10){ //start faster music due to low on time
                 al_set_sample_instance_playing(themeInstance, false);
                 al_set_sample_instance_playing(themeFastInstance, true);
             }
-            if (time==1){ //lost by time running out - play once
+            if (time==10){ //lost by time running out - play once
                 al_set_sample_instance_playing(themeInstance, false);
                 al_set_sample_instance_playing(themeFastInstance, false);
                 al_set_sample_instance_playing(deadInstance, true);
