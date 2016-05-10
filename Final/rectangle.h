@@ -13,7 +13,7 @@ namespace csis3700 {
 
     /**
      * Construct a rectangle. Note if width or height is negative then
-     * this rectangle is considered degenerate (empty).  
+     * this rectangle is considered degenerate (empty).
      */
     rectangle(float x, float y, float width, float height);
 
@@ -56,7 +56,7 @@ namespace csis3700 {
     rectangle intersection(const rectangle& other) const;
 
     /**
-     * Returns true iff this rectangle contains the point specified by
+     * Returns true if this rectangle contains the point specified by
      * the supplied vector (relative to the origin).
      */
     bool contains(vec2d point) const;

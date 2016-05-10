@@ -14,7 +14,7 @@ namespace csis3700 {
     sprite::advance_by_time(dt);
     position = position + dt * velocity;
     velocity = velocity + dt * acceleration;
-    std::cout << velocity << std::endl;
+    //std::cout << velocity << std::endl;
   }
 
   void phys_sprite::set_velocity(const vec2d& v) {

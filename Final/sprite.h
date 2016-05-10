@@ -75,9 +75,11 @@ namespace csis3700 {
     virtual rectangle collision_rectangle(const sprite& other) const;
 
     virtual void resolve(const collision& collision, sprite* other) = 0;
+    virtual bool is_goomba(){return false;}
+    virtual bool is_coin(){return false;}
 
   protected:
-    
+
     /**
      * My position
      */
