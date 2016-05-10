@@ -15,8 +15,10 @@ namespace csis3700 {
          obstruction_sprite(float initial_x, float initial_y, ALLEGRO_BITMAP *image=NULL);
         virtual void set_velocity(const vec2d& v);
         virtual vec2d get_velocity() const;
+        virtual bool is_coin(){return true;}
         virtual void resolve(const collision& collision, sprite* other);
     private:
+        image_sequence *ground;
         image_sequence *tunnel;
         image_sequence *coin;
         image_sequence *castle;

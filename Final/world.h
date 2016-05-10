@@ -13,6 +13,9 @@
 #include "allegro5/allegro_acodec.h"
 
 namespace csis3700 {
+    class enemy_sprite;
+    class player_sprite;
+
   class world {
   public:
     /**
@@ -60,11 +63,16 @@ namespace csis3700 {
      * Return true iff game is over and window should close
      */
     bool should_exit();
+    void playerkilled();
+    void enemykilled();
+    void coincollected();
 
   private:
     void resolve_collisions();
+    bool exit = false;
     player_sprite *player;
     enemy_sprite *goomba;
+    obstruction_sprite *ground;
     obstruction_sprite *tunnel;
     obstruction_sprite *coin;
     obstruction_sprite *castle;

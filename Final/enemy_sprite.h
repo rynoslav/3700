@@ -9,7 +9,9 @@ namespace csis3700 {
     virtual bool is_passive() const;
     virtual void set_on_ground(bool v);
     virtual void advance_by_time(double dt);
+    virtual bool is_goomba(){return true;}
     virtual void resolve(const collision& collision, sprite* other);
+    bool changedir = false;
   private:
     bool on_ground;
     image_sequence *walk;

@@ -29,19 +29,33 @@ namespace csis3700 {
   world::world() {
       font = al_load_font("8bit.ttf", 40, NULL);
       assert(font != NULL);
-      player = new player_sprite(0, 505);
+      ground = new obstruction_sprite(-1280, 565, image_library::get() -> get("ground.png"));
+      sprites.push_back(ground);
+      player = new player_sprite(0, 505, this);
       sprites.push_back(player);
-      goomba = new enemy_sprite(0, 525);
+      goomba = new enemy_sprite(500, 520);
       sprites.push_back(goomba);
-      //tunnel = new obstruction_sprite(100, 465, image_library::get() -> get("tube.png"));
-      //sprites.push_back(tunnel);
-      tunnel = new obstruction_sprite(50, 465, image_library::get() -> get("tube.png"));
-      sprites.push_back(tunnel);
-      castle = new obstruction_sprite(1000, 462, image_library::get() -> get("castle.png"));
-      sprites.push_back(castle);
-      brick = new obstruction_sprite(1000, 525, image_library::get() -> get("brick.png"));
+      brick = new obstruction_sprite(100, 525, image_library::get() -> get("brick.png"));
       sprites.push_back(brick);
-      coin = new obstruction_sprite(1000, 505,image_library::get() -> get("coin.png"));
+      brick = new obstruction_sprite(135, 525, image_library::get() -> get("brick.png"));
+      sprites.push_back(brick);
+      brick = new obstruction_sprite(170, 525, image_library::get() -> get("brick.png"));
+      sprites.push_back(brick);
+      brick = new obstruction_sprite(205, 525, image_library::get() -> get("brick.png"));
+      sprites.push_back(brick);
+      //brick = new obstruction_sprite(135, 525, image_library::get() -> get("brick.png"));
+      //sprites.push_back(brick);
+      tunnel = new obstruction_sprite(250, 465, image_library::get() -> get("tube.png"));
+      sprites.push_back(tunnel);
+      tunnel = new obstruction_sprite(750, 465, image_library::get() -> get("tube.png"));
+      sprites.push_back(tunnel);
+      castle = new obstruction_sprite(1000, 265, image_library::get() -> get("castle.png"));
+      sprites.push_back(castle);
+      coin = new obstruction_sprite(850, 400,image_library::get() -> get("coin.png"));
+      sprites.push_back(coin);
+      coin = new obstruction_sprite(900, 400,image_library::get() -> get("coin.png"));
+      sprites.push_back(coin);
+      coin = new obstruction_sprite(950, 400,image_library::get() -> get("coin.png"));
       sprites.push_back(coin);
       if (camera_x < 0)
         camera_x = 0;
@@ -109,9 +123,19 @@ namespace csis3700 {
 
   void world::resolve_collisions() {
     //if(player -> get_position().get_x() == tunnel -> get_position().get_x()){
-    for (int i = 2; i < 5; i++){
-        collision player_obstacle(sprites[0], sprites[i]);
+    //collision player_obstacle(sprites[0], sprites[i]);
+    //player -> resolve(player_obstacle, sprites[i]);
+    collision player_obstacle(sprites[1], sprites[0]);
+        player -> resolve(player_obstacle, sprites[0]);
+    for (int i = 2; i < sprites.size(); i++){
+        collision player_obstacle(sprites[1], sprites[i]);
         player -> resolve(player_obstacle, sprites[i]);
+        //collision enemy_obstacle(sprites[2], sprites[i]);
+        //goomba -> resolve(enemy_obstacle, sprites[i]);
+    }
+    for (int i = 3; i < sprites.size(); i++){
+        collision enemy_obstacle(sprites[2], sprites[i]);
+        goomba -> resolve(enemy_obstacle, sprites[i]);
     }
     //}
   }
@@ -162,11 +186,35 @@ namespace csis3700 {
                 al_set_sample_instance_playing(themeFastInstance, false);
                 al_set_sample_instance_playing(deadInstance, true);
             }
-
+            if (lives==0){
+                al_draw_textf(font, al_map_rgb(255,255,255), 500, 250, 0, "GAME OVER");
+                al_set_sample_instance_playing(themeInstance, false);
+                al_set_sample_instance_playing(themeFastInstance, false);
+                al_set_sample_instance_playing(deadInstance, true);
+                exit = true;
+                al_rest(10);
+            }
   }
 
   bool world::should_exit() {
-    return false;
+    if (exit == true)
+        return true;
+    else
+        return false;
   }
 
+  void world::playerkilled(){
+    if(lives>0)
+        lives--;
+    else
+        lives = 0;
+  }
+
+  void world::enemykilled(){
+     score += 10;
+  }
+
+  void world::coincollected(){
+     score += 10;
+  }
 }
