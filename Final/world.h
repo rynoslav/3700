@@ -64,7 +64,7 @@ namespace csis3700 {
      */
     bool should_exit();
     void playerkilled();
-    void enemykilled();
+    void enemyKilled(sprite* enemy);
     void coincollected();
 
   private:
