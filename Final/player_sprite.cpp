@@ -132,7 +132,7 @@ namespace csis3700 {
   //else if (other->bounding_box().upper_left_corner().get_y() <= (get_position().get_y() + get_height())){ //&& other->bounding_box().upper_left_corner().get_x() <= (get_position().get_x() + get_width()) && (other->bounding_box().upper_left_corner().get_x() + other-> get_width()) >= get_position().get_x()){
     else if(collision_rectangle(*other).get_height() < collision_rectangle(*other).get_width() && bounding_box().lower_right_corner().get_y() > other -> get_position().get_y()){
         cout<<"kill" << endl;
-        theworld -> enemykilled();
+        theworld -> enemyKilled(other);
         //set_image_sequence(still);
     }
   }

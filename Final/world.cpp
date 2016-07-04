@@ -2,6 +2,7 @@
 #include "image_library.h"
 #include "keyboard_manager.h"
 #include <cassert>
+#include <vector>
 #include <algorithm>
 #include "sprite.h"
 #include "allegro5/allegro.h"
@@ -11,6 +12,7 @@
 #include "obstruction_sprite.h"
 #include "collision.h"
 #include "enemy_sprite.h"
+#include "player_sprite.h"
 #include "allegro5/allegro_audio.h"
 #include "allegro5/allegro_acodec.h"
 
@@ -175,7 +177,7 @@ namespace csis3700 {
     al_draw_textf(font, al_map_rgb(255, 255, 255), 100, 0, 0, "SCORE: %d", score);
     al_draw_textf(font, al_map_rgb(255, 255, 255), 1000, 0, 0, "LIVES x %d", lives);
     al_draw_textf(font, al_map_rgb(255, 255, 255), 500, 0, 0, "TIME: %d", time/10);
-    time -= .0000000000001;
+    time -= 1;
 
             if (time<=3000 && time > 10){ //start faster music due to low on time
                 al_set_sample_instance_playing(themeInstance, false);
@@ -210,8 +212,16 @@ namespace csis3700 {
         lives = 0;
   }
 
-  void world::enemykilled(){
-     score += 10;
+
+
+
+
+ void world::enemyKilled(sprite* enemy){
+
+        vector <sprite*>::iterator it = find(sprites.begin(), sprites.end(), enemy);
+        if (it!= sprites.end())
+            sprites.erase(it);
+        score +=10;
   }
 
   void world::coincollected(){
